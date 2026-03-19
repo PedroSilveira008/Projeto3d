@@ -736,12 +736,20 @@ else:
                 card('Adicionar produto fabricado','Insira as informações para adicionar o produto ao catálogo.')
 
                 id_filamento = st.selectbox('Filamento utilizado', filamentos['id_filamento'])
-                filamento_info = filamentos[filamentos['id_filamento'] == id_filamento].iloc[0]
-                st.caption(f"Tipo: {filamento_info['tipo']} | Cor: {filamento_info['cor']} | Estoque: {filamento_info['estoque']:.2f} g")
+                filtrado = filamentos[filamentos['id_filamento'] == id_filamento]
+                if not filtrado.empty:
+                    filamento_info = filtrado.iloc[0]
+                    st.caption(f"Tipo: {filamento_info['tipo']} | Cor: {filamento_info['cor']}")
+                else:
+                    st.warning('Filamento não encontrado.')
                 
                 id_maq = st.selectbox('Máquina utilizada', maquinas['id_maq'])
-                maq_info = maquinas[maquinas['id_maq'] == id_maq].iloc[0]
-                st.caption(f"Máquina: {maq_info['nome']}")
+                maq_filtrado = maquinas[maquinas['id_maq'] == id_maq]
+                if not maq_filtrado.empty:
+                    maq_info = maq_filtrado.iloc[0]
+                    st.caption(f"Máquina: {maq_info['nome']}")
+                else:
+                    st.warning('Máquina não encontrada')
 
                 nome_prod = st.text_input('Nome do produto')
                 tempo_min = st.number_input('Tempo gasto de impressão (min)', min_value=0.0, format='%.2f')
