@@ -76,7 +76,7 @@ fundo('bg.png')
 def conectar():
     return psycopg2.connect(
         host=st.secrets['db']['host'],
-        port=5432,
+        port=6543,
         dbname=st.secrets['db']['name'],
         user=st.secrets['db']['user'],
         password=st.secrets['db']['password']
