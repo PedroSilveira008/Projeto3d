@@ -77,9 +77,9 @@ def conectar():
     return psycopg2.connect(
         host=st.secrets["host"],
         port=5432,
-        dbname=st.secrets["DB_NAME"],
+        dbname=st.secrets["name"],
         user=st.secrets["user"],
-        password=st.secrets["DB_PASSWORD"]
+        password=st.secrets["password"]
     )
 
 def parar_maq(): 
