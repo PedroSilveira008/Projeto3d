@@ -1,0 +1,8 @@
+pandas
+numpy
+streamlit
+matplotlib
+Pillow
+bcrypt
+streamlit-calendar
+psycopg2-binary
