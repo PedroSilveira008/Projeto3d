@@ -75,11 +75,11 @@ fundo('bg.png')
 
 def conectar():
     return psycopg2.connect(
-        host=st.secrets["host"],
+        host=st.secrets['db']['host'],
         port=5432,
-        dbname=st.secrets["name"],
-        user=st.secrets["user"],
-        password=st.secrets["password"]
+        dbname=st.secrets['db']['name'],
+        user=st.secrets['db']['user'],
+        password=st.secrets['db']['password']
     )
 
 def parar_maq(): 
