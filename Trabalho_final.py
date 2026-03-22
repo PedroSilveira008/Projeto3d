@@ -301,53 +301,35 @@ def crg_eventos():
 def calendario():
     calendario_opt = {
         'initialView': 'dayGridMonth',
-        'locale': 'pt-br'
+        'locale': 'pt-br',
+        'buttonText': {
+            'today': 'Hoje',
+        }
     }
 
-    eventos = [
-        {
-            "title": "Teste evento",
-            "start": "2025-03-22",
-            "color": "blue"
-        }
-    ]
+    df = crg_eventos()
+    if df.empty:
+        st.info('Nenhum evento encontrado')
+        calendar(events=[], options=calendario_opt, key='calendar_main')
+        return
 
-    calendar(
-        events=eventos,
-        options=calendario_opt,
-        key="calendar_test"
-    )
-    # calendario_opt = {
-    #     'initialView': 'dayGridMonth',
-    #     'locale': 'pt-br',
-    #     'buttonText': {
-    #         'today': 'Hoje',
-    #     }
-    # }
+    df['dt_vencimento'] = pd.to_datetime(df['dt_vencimento']).dt.strftime('%Y-%m-%d')
 
-    # df = crg_eventos()
-    # if df.empty:
-    #     st.info('Nenhum evento encontrado')
-    #     calendar(events=[], options=calendario_opt, key='calendar_main')
-    #     return
+    eventos = []
+    for _, row in df.iterrows():
+        cor = 'blue'
+        if row['status_venda'] == 'atrasado':
+            cor = 'red'
+        elif row['status_venda'] == 'enviado':
+            cor = 'green'
 
-    # df['dt_vencimento'] = pd.to_datetime(df['dt_vencimento']).dt.strftime('%Y-%m-%d')
+        eventos.append({
+            'title': row['nome_prod'],
+            'start': row['dt_vencimento'],
+            'color': cor
+        })
 
-    # eventos = []
-    # for _, row in df.iterrows():
-    #     cor = 'blue'
-    #     if row['status_venda'] == 'atrasado':
-    #         cor = 'red'
-    #     elif row['status_venda'] == 'enviado':
-    #         cor = 'green'
-
-    #     eventos.append({
-    #         'title': row['nome_prod'],
-    #         'start': row['dt_vencimento'],
-    #         'color': cor
-    #     })
-
-    # calendar(events=eventos, options=calendario_opt, key='calendar_main')
+    calendar(events=eventos, options=calendario_opt, key='calendar_main')
 
 
 def validar_filamento(id_filamento, tipo, cor, marca, custo):
