@@ -309,8 +309,9 @@ def calendario():
     
     df = crg_eventos()
     if df.empty:
-        st.warning('Carregando calendário...')
-        st.stop()
+        st.info('Nenhum evento encontrado')
+        calendar(events=[], options=calendario_opt)
+        return
 
     df['dt_vencimento'] = pd.to_datetime(df['dt_vencimento']).dt.strftime('%Y-%m-%d')
     eventos = []
