@@ -131,15 +131,18 @@ def hash_senha(senha):
 
 def verifica_senha(senha, hash_salvo):
     return bcrypt.checkpw(senha.encode(), hash_salvo.encode())
-
+    
+@st.cache_data(ttl=30)
 def bd_filamento():
     with conectar() as conn:
         return pd.read_sql_query('SELECT * FROM filamentos', conn)
 
+@st.cache_data(ttl=30)
 def bd_maquinas():
     with conectar() as conn:
         return pd.read_sql_query('SELECT * FROM maquinas', conn)
 
+@st.cache_data(ttl=30)
 def bd_pedidos():
     query = '''
     SELECT * FROM pedidos pd
@@ -147,11 +150,13 @@ def bd_pedidos():
     '''
     with conectar() as conn:
         return pd.read_sql_query(query, conn)
-    
+        
+@st.cache_data(ttl=30)    
 def bd_produtos():
     with conectar() as conn:
         return pd.read_sql_query('SELECT * FROM produtos', conn)
 
+@st.cache_data(ttl=30)
 def bd_vendas():
     query = '''
     SELECT v.id_vendas, p.nome_prod, v.quantidade, v.data, v.prazo,
@@ -281,6 +286,18 @@ def producao_por_status():
     with conectar() as conn:
         return pd.read_sql_query(query, conn)
 
+
+@st.cache_data(ttl=30)
+def crg_eventos():
+    with conectar() as conn:
+        return pd.read_sql_query(
+            '''
+            SELECT p.nome_prod, v.dt_vencimento, v.status_venda
+            FROM vendas v
+            JOIN produtos p ON v.id_produto = p.id_produto
+            ''', conn
+        )
+            
 def calendario():
     calendario_opt = {
         'initialView': 'dayGridMonth',
@@ -289,19 +306,11 @@ def calendario():
             'today': 'Hoje',
         }
     }
-
-    with conectar() as conn:
-        df = pd.read_sql_query(
-            '''
-            SELECT p.nome_prod, v.dt_vencimento, v.status_venda
-            FROM vendas v
-            JOIN produtos p ON v.id_produto = p.id_produto
-            ''', conn
-        )
-
+    
+    df = crg_eventos()
     if df.empty:
-        st.info('Nenhum evento no calendário.')
-        return
+        st.warning('Carregando calendário...')
+        st.stop()
 
     df['dt_vencimento'] = pd.to_datetime(df['dt_vencimento']).dt.strftime('%Y-%m-%d')
     eventos = []
@@ -319,7 +328,7 @@ def calendario():
             'color': cor
         })
 
-    calendar(events=eventos, options=calendario_opt, key='Calendar')
+    calendar(events=eventos, options=calendario_opt, key=f'Calendar_{len(eventos)}')
 
 
 def validar_filamento(id_filamento, tipo, cor, marca, custo):
