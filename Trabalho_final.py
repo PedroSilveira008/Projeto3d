@@ -329,7 +329,7 @@ def calendario():
             'color': cor
         })
 
-    calendar(events=eventos, options=calendario_opt, key=f'Calendar_{len(eventos)}')
+    calendar(events=eventos, options=calendario_opt, key='Calendario')
 
 
 def validar_filamento(id_filamento, tipo, cor, marca, custo):
