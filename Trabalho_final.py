@@ -306,16 +306,16 @@ def calendario():
             'today': 'Hoje',
         }
     }
-    
+
     df = crg_eventos()
     if df.empty:
         st.info('Nenhum evento encontrado')
-        calendar(events=[], options=calendario_opt)
+        calendar(events=[], options=calendario_opt, key='calendar_main')
         return
 
     df['dt_vencimento'] = pd.to_datetime(df['dt_vencimento']).dt.strftime('%Y-%m-%d')
-    eventos = []
 
+    eventos = []
     for _, row in df.iterrows():
         cor = 'blue'
         if row['status_venda'] == 'atrasado':
@@ -329,7 +329,7 @@ def calendario():
             'color': cor
         })
 
-    calendar(events=eventos, options=calendario_opt, key='Calendario')
+    calendar(events=eventos, options=calendario_opt, key='calendar_main')
 
 
 def validar_filamento(id_filamento, tipo, cor, marca, custo):
