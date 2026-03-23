@@ -823,7 +823,7 @@ else:
                         st.success('✅ Produto salvo no catálogo!')
                         st.dataframe(bd_produtos(), use_container_width=True)
                         time.sleep(1.5)
-                        st.rerun()##
+                        st.rerun()
                         
         with aba4_3:
             if st.session_state.nivel == 'usuario':
@@ -841,7 +841,7 @@ else:
 
                     if not cx.empty:
                         st.dataframe(cx)
-                        id_cx = st.selectbox('Selecione o ID', cx['id_produto'], key='cx')
+                        id_cx = st.selectbox('Selecione o ID', cx['id_produto'], help='ID',key='cx')
 
                         if st.button("Mover para 'Fila de impressão'", key='cx_bt'):
                             atualizar_produto(id_cx, 'fila_impressao')
