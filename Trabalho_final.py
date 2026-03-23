@@ -841,7 +841,7 @@ else:
 
                     if not cx.empty:
                         st.dataframe(cx)
-                        id_cx = st.selectbox('Selecione o ID', cx['id_produto'], help='ID',key='cx')
+                        id_cx = st.selectbox('Selecione o ID', cx['id_produto'], key='cx')
 
                         if st.button("Mover para 'Fila de impressão'", key='cx_bt'):
                             atualizar_produto(id_cx, 'fila_impressao')
