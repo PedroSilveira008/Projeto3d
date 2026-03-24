@@ -977,175 +977,175 @@ else:
             aba6_1, aba6_2, aba6_3, aba6_4 = st.tabs(['Produção por status', 'Vendas', 'Pedidos', 'Máquinas'])
 
 # Produção por status
-                with aba6_1:
-                    df_produtos = producao_por_status()
-                    
-                    if df_produtos.empty:
-                        st.warning('Não há produtos cadastrados!')
-                    else:
-                        fig, ax = plt.subplots(figsize=(5,3))
-                        fig.patch.set_alpha(0)
-                        ax.set_facecolor('none')
+            with aba6_1:
+                df_produtos = producao_por_status()
+                
+                if df_produtos.empty:
+                    st.warning('Não há produtos cadastrados!')
+                else:
+                    fig, ax = plt.subplots(figsize=(5,3))
+                    fig.patch.set_alpha(0)
+                    ax.set_facecolor('none')
 
-                        ax.bar(
-                            df_produtos['status_produto'],
-                            df_produtos['quantidade'],
-                            color='#7d77e1',
-                            edgecolor='#5751b4'
-                        )
+                    ax.bar(
+                        df_produtos['status_produto'],
+                        df_produtos['quantidade'],
+                        color='#7d77e1',
+                        edgecolor='#5751b4'
+                    )
 
-                        ax.set_title('Produção por Status', color='white')
-                        ax.tick_params(axis='both', colors='white')
-                        st.pyplot(fig)
+                    ax.set_title('Produção por Status', color='white')
+                    ax.tick_params(axis='both', colors='white')
+                    st.pyplot(fig)
 
 # Vendas M/S
-                with aba6_2:
-                    col_m, col_s = st.columns(2)
+            with aba6_2:
+                col_m, col_s = st.columns(2)
 
-                    with conectar() as conn:
-                        vendas_mes = pd.read_sql_query(
-                            '''
-                            SELECT TO_CHAR(data, 'MM') as mes,
-                                   COUNT(*) as total
-                            FROM vendas
-                            GROUP BY mes
-                            ORDER BY mes
-                            ''', conn
-                        )
+                with conectar() as conn:
+                    vendas_mes = pd.read_sql_query(
+                        '''
+                        SELECT TO_CHAR(data, 'MM') as mes,
+                               COUNT(*) as total
+                        FROM vendas
+                        GROUP BY mes
+                        ORDER BY mes
+                        ''', conn
+                    )
 
-                        vendas_semana = pd.read_sql_query(
-                            '''
-                            SELECT TO_CHAR(data, 'WW') as semana,
-                                   COUNT(*) as total
-                            FROM vendas
-                            GROUP BY semana
-                            ORDER BY semana
-                            ''', conn
-                        )
+                    vendas_semana = pd.read_sql_query(
+                        '''
+                        SELECT TO_CHAR(data, 'WW') as semana,
+                               COUNT(*) as total
+                        FROM vendas
+                        GROUP BY semana
+                        ORDER BY semana
+                        ''', conn
+                    )
 
-                    with col_m:
-                        st.markdown('### Vendas mensais')
+                with col_m:
+                    st.markdown('### Vendas mensais')
 
-                        fig, ax = plt.subplots(figsize=(5,3))
-                        fig.patch.set_alpha(0)
-                        ax.set_facecolor('none')
+                    fig, ax = plt.subplots(figsize=(5,3))
+                    fig.patch.set_alpha(0)
+                    ax.set_facecolor('none')
 
-                        ax.plot(vendas_mes['mes'], vendas_mes['total'], marker='o', color='#7d77e1')
-                        ax.set_title('Faturamento por mês', color='white')
-                        ax.tick_params(colors='white')
-                        st.pyplot(fig)
+                    ax.plot(vendas_mes['mes'], vendas_mes['total'], marker='o', color='#7d77e1')
+                    ax.set_title('Faturamento por mês', color='white')
+                    ax.tick_params(colors='white')
+                    st.pyplot(fig)
 
-                    with col_s:
-                        st.markdown('### Vendas semanais')
+                with col_s:
+                    st.markdown('### Vendas semanais')
 
-                        fig, ax = plt.subplots(figsize=(5,3))
-                        fig.patch.set_alpha(0)
-                        ax.set_facecolor('none')
+                    fig, ax = plt.subplots(figsize=(5,3))
+                    fig.patch.set_alpha(0)
+                    ax.set_facecolor('none')
 
-                        ax.plot(vendas_semana['semana'], vendas_semana['total'], marker='o', color='#7d77e1')
-                        ax.set_title('Faturamento por semana', color='white')
-                        ax.tick_params(colors='white')
-                        st.pyplot(fig)
+                    ax.plot(vendas_semana['semana'], vendas_semana['total'], marker='o', color='#7d77e1')
+                    ax.set_title('Faturamento por semana', color='white')
+                    ax.tick_params(colors='white')
+                    st.pyplot(fig)
 
 
 # Pedidos M/S
-                with aba6_3:
-                    col_m, col_s = st.columns(2)
+            with aba6_3:
+                col_m, col_s = st.columns(2)
 
-                    with conectar() as conn:
-                        pedidos_mes = pd.read_sql_query(
-                            '''
-                            SELECT TO_CHAR(v.data, 'MM') as mes,
-                                   COUNT(*) as total
-                            FROM pedidos p
-                            JOIN vendas v ON p.id_produto = v.id_produto
-                            GROUP BY mes
-                            ORDER BY mes
-                            ''', conn
-                        )
+                with conectar() as conn:
+                    pedidos_mes = pd.read_sql_query(
+                        '''
+                        SELECT TO_CHAR(v.data, 'MM') as mes,
+                               COUNT(*) as total
+                        FROM pedidos p
+                        JOIN vendas v ON p.id_produto = v.id_produto
+                        GROUP BY mes
+                        ORDER BY mes
+                        ''', conn
+                    )
 
-                        pedidos_semana = pd.read_sql_query(
-                            '''
-                            SELECT TO_CHAR(v.data, 'WW') as semana,
-                                   COUNT(*) as total
-                            FROM pedidos p
-                            JOIN vendas v ON p.id_produto = v.id_produto
-                            GROUP BY semana
-                            ORDER BY semana
-                            ''', conn
-                        )
+                    pedidos_semana = pd.read_sql_query(
+                        '''
+                        SELECT TO_CHAR(v.data, 'WW') as semana,
+                               COUNT(*) as total
+                        FROM pedidos p
+                        JOIN vendas v ON p.id_produto = v.id_produto
+                        GROUP BY semana
+                        ORDER BY semana
+                        ''', conn
+                    )
 
-                    with col_m:
-                        st.markdown('### Pedidos mensais')
+                with col_m:
+                    st.markdown('### Pedidos mensais')
 
-                        fig, ax = plt.subplots(figsize=(5,3))
-                        fig.patch.set_alpha(0)
-                        ax.set_facecolor('none')
-                        ax.bar(pedidos_mes['mes'], pedidos_mes['total'], color='#7d77e1')
-                        ax.set_title('Pedidos por mês', color='white')
-                        ax.tick_params(colors='white')
-                        st.pyplot(fig)
+                    fig, ax = plt.subplots(figsize=(5,3))
+                    fig.patch.set_alpha(0)
+                    ax.set_facecolor('none')
+                    ax.bar(pedidos_mes['mes'], pedidos_mes['total'], color='#7d77e1')
+                    ax.set_title('Pedidos por mês', color='white')
+                    ax.tick_params(colors='white')
+                    st.pyplot(fig)
 
-                    with col_s:
-                        st.markdown('### Pedidos semanais')
+                with col_s:
+                    st.markdown('### Pedidos semanais')
 
-                        fig, ax = plt.subplots(figsize=(5,3))
-                        fig.patch.set_alpha(0)
-                        ax.set_facecolor('none')
-                        ax.bar(pedidos_semana['semana'], pedidos_semana['total'], color='#7d77e1')
-                        ax.set_title('Pedidos por semana', color='white')
-                        ax.tick_params(colors='white')
-                        st.pyplot(fig)
+                    fig, ax = plt.subplots(figsize=(5,3))
+                    fig.patch.set_alpha(0)
+                    ax.set_facecolor('none')
+                    ax.bar(pedidos_semana['semana'], pedidos_semana['total'], color='#7d77e1')
+                    ax.set_title('Pedidos por semana', color='white')
+                    ax.tick_params(colors='white')
+                    st.pyplot(fig)
 
 
 # Horas uso M/S
-                with aba6_4:
-                    col_m, col_s = st.columns(2)
+            with aba6_4:
+                col_m, col_s = st.columns(2)
 
-                    with conectar() as conn:
-                        maq_mes = pd.read_sql_query(
-                            '''
-                            SELECT TO_CHAR(v.data, 'MM') as mes,
-                                   SUM(p.tempo_imprimir)/60 as horas
-                            FROM produtos p
-                            JOIN vendas v ON p.id_produto = v.id_produto
-                            GROUP BY mes
-                            ORDER BY mes
-                            ''', conn
-                        )
+                with conectar() as conn:
+                    maq_mes = pd.read_sql_query(
+                        '''
+                        SELECT TO_CHAR(v.data, 'MM') as mes,
+                               SUM(p.tempo_imprimir)/60 as horas
+                        FROM produtos p
+                        JOIN vendas v ON p.id_produto = v.id_produto
+                        GROUP BY mes
+                        ORDER BY mes
+                        ''', conn
+                    )
 
-                        maq_semana = pd.read_sql_query(
-                            '''
-                            SELECT TO_CHAR(v.data, 'WW') as semana,
-                                   SUM(p.tempo_imprimir)/60 as horas
-                            FROM produtos p
-                            JOIN vendas v ON p.id_produto = v.id_produto
-                            GROUP BY semana
-                            ORDER BY semana
-                            ''', conn
-                        )
+                    maq_semana = pd.read_sql_query(
+                        '''
+                        SELECT TO_CHAR(v.data, 'WW') as semana,
+                               SUM(p.tempo_imprimir)/60 as horas
+                        FROM produtos p
+                        JOIN vendas v ON p.id_produto = v.id_produto
+                        GROUP BY semana
+                        ORDER BY semana
+                        ''', conn
+                    )
 
-                    with col_m:
-                        st.markdown('### Horas de uso por mês')
+                with col_m:
+                    st.markdown('### Horas de uso por mês')
 
-                        fig, ax = plt.subplots(figsize=(5,3))
-                        fig.patch.set_alpha(0)
-                        ax.set_facecolor('none')
-                        ax.bar(maq_mes['mes'], maq_mes['horas'], color='#7d77e1')
-                        ax.set_title('Horas trabalhadas (mês)', color='white')
-                        ax.tick_params(colors='white')
-                        st.pyplot(fig)
+                    fig, ax = plt.subplots(figsize=(5,3))
+                    fig.patch.set_alpha(0)
+                    ax.set_facecolor('none')
+                    ax.bar(maq_mes['mes'], maq_mes['horas'], color='#7d77e1')
+                    ax.set_title('Horas trabalhadas (mês)', color='white')
+                    ax.tick_params(colors='white')
+                    st.pyplot(fig)
 
-                    with col_s:
-                        st.markdown('### Horas de uso por semana')
+                with col_s:
+                    st.markdown('### Horas de uso por semana')
 
-                        fig, ax = plt.subplots(figsize=(5,3))
-                        fig.patch.set_alpha(0)
-                        ax.set_facecolor('none')
-                        ax.bar(maq_semana['semana'], maq_semana['horas'], color='#7d77e1')
-                        ax.set_title('Horas trabalhadas (semana)', color='white')
-                        ax.tick_params(colors='white')
-                        st.pyplot(fig)
+                    fig, ax = plt.subplots(figsize=(5,3))
+                    fig.patch.set_alpha(0)
+                    ax.set_facecolor('none')
+                    ax.bar(maq_semana['semana'], maq_semana['horas'], color='#7d77e1')
+                    ax.set_title('Horas trabalhadas (semana)', color='white')
+                    ax.tick_params(colors='white')
+                    st.pyplot(fig)
 
 # ABA 7 - Calendário
         with abas[6]:
