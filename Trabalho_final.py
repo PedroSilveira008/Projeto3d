@@ -1150,7 +1150,8 @@ else:
 # ABA 7 - Calendário
         with abas[6]:
             card('Calendário de prazos','Registro de produtos e data limite de envio.')
-            calendario()
+            with st.spinner("Carregando calendário..."):
+                calendario()
             
 
 # ABA 8 - Usuários - exclusiva admin
