@@ -70,7 +70,6 @@ def box(infos, valor, icon):
 
 fundo('bg.png')
 
-
 # Conexão
 def conectar():
     conn = psycopg2.connect(
@@ -112,7 +111,6 @@ def prod_impresso():
 prod_impresso()
 parar_maq()
 
-
 # Session State
 if 'logado' not in st.session_state:
     st.session_state.logado = False
@@ -120,7 +118,6 @@ if 'tela_login' not in st.session_state:
     st.session_state.tela_login = 'criar'
 if 'nivel' not in st.session_state:
     st.session_state.nivel = None
-
 
 # Funções
 def hash_senha(senha):
@@ -342,7 +339,6 @@ def validar_filamento(id_filamento, tipo, cor, marca, custo):
         st.error('Informe o custo do filamento.'); return False
     return True
 
-
 # Tela de Login
 if not st.session_state.logado:
     st.markdown('''
@@ -403,7 +399,6 @@ if not st.session_state.logado:
                 st.toast('Conta criada com sucesso!', icon='✅')
 
         st.markdown('<div style="margin-top:20px;"><span class="link">Já tem uma conta?</span></div>', unsafe_allow_html=True)
-
         if st.button('Entrar', icon=':material/login:'):
             st.session_state.tela_login = 'login'
             st.rerun()
@@ -430,7 +425,6 @@ if not st.session_state.logado:
                 st.session_state.usuario = nome_email
                 st.session_state.unome = user.iloc[0]['nome']
                 st.session_state.nivel = user.iloc[0]['nivel']
-                time.sleep(1)
                 st.rerun()
             else:
                 st.error('Usuário ou senha inválidos')
@@ -671,7 +665,6 @@ else:
                                     st.stop()
 
                         st.dataframe(bd_filamento(), use_container_width=True)
-                        time.sleep(1.5)
                         st.rerun()
 
 
@@ -708,7 +701,6 @@ else:
                         nova_maq(nome, horas_uso, dt_manutencao)
                         st.success('Máquina adicionada!')
                         st.dataframe(bd_maquinas(), use_container_width=True)
-                        time.sleep(1.5)
                         st.rerun()
 
 
@@ -805,7 +797,6 @@ else:
 
                         st.success('✅ Produto salvo no catálogo!')
                         st.dataframe(bd_produtos(), use_container_width=True)
-                        time.sleep(1.5)
                         st.rerun()
                         
         with aba4_3:
@@ -831,7 +822,6 @@ else:
                             nova_venda(id_cx)
 
                             st.success('Pedido criado e movido para produção!')
-                            time.sleep(1)
                             st.rerun()
                     else:
                         st.caption('Caixa de entrada vazia')
@@ -895,7 +885,6 @@ else:
                                 st.success(f'Máquina {maq_id} agora está Operando!')
 
                             st.success('Produto em impressão!')
-                            time.sleep(2)
                             st.rerun()
                     else:
                         st.caption('Fila de impressão vazia')
@@ -923,7 +912,6 @@ else:
                             atualizar_produto(id_imp, 'pos_processamento')
 
                             st.success("Movido para 'Pós-processamento'!")
-                            time.sleep(1)
                             st.rerun()
                     else:
                         st.caption('Nenhum produto impresso')
@@ -940,7 +928,6 @@ else:
                             atualizar_produto(id_posp, 'pronto')
 
                             st.success("Movido para 'Pronto'!")
-                            time.sleep(1)
                             st.rerun()
                     else:
                         st.caption('Nenhum produto aguardando pós-processamento')
@@ -958,7 +945,6 @@ else:
                             venda_enviada(id_pronto)
 
                             st.success('Produto enviado e venda finalizada!')
-                            time.sleep(1)
                             st.rerun()
                     else:
                         st.caption('Não há produtos prontos')
@@ -1194,5 +1180,4 @@ else:
                         conn.commit()
 
                     st.success('Nível atualizado com sucesso!')
-                    time.sleep(1.5)
                     st.rerun()
