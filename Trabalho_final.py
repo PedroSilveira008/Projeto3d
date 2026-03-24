@@ -71,8 +71,7 @@ def box(infos, valor, icon):
 fundo('bg.png')
 
 
-# CONEXÃO
-
+# Conexão
 def conectar():
     conn = psycopg2.connect(
         host=st.secrets["DB_HOST"],
@@ -114,8 +113,7 @@ prod_impresso()
 parar_maq()
 
 
-# SESSION STATE
-
+# Session State
 if 'logado' not in st.session_state:
     st.session_state.logado = False
 if 'tela_login' not in st.session_state:
@@ -124,8 +122,7 @@ if 'nivel' not in st.session_state:
     st.session_state.nivel = None
 
 
-# FUNÇÕES
-
+# Funções
 def hash_senha(senha):
     return bcrypt.hashpw(senha.encode(), bcrypt.gensalt()).decode()
 
@@ -264,7 +261,7 @@ def buscar_produto_por_id(id_produto):
             'SELECT * FROM produtos WHERE id_produto = %s',
             conn,
             params=(id_produto,)
-        )###
+        )
 
 def buscar_produto_por_cor(cor):
     with conectar() as conn:
@@ -346,8 +343,7 @@ def validar_filamento(id_filamento, tipo, cor, marca, custo):
     return True
 
 
-# TELA LOGIN
-
+# Tela de Login
 if not st.session_state.logado:
     st.markdown('''
     <style>
@@ -372,8 +368,7 @@ if not st.session_state.logado:
     img = Image.open('logo.png')
     st.image(img)
 
-# CRIAR CONTA
-
+# Criar conta
     if st.session_state.tela_login == 'criar':
         st.markdown("<h2 style='color:#9bbdff;'>Criar conta</h2>", text_alignment='center', unsafe_allow_html=True)
 
@@ -413,12 +408,9 @@ if not st.session_state.logado:
             st.session_state.tela_login = 'login'
             st.rerun()
 
-# LOGIN
-
+# Login
     else:
-        st.markdown("<h2 style='color:#9bbdff;'>Login</h2>",
-                    text_alignment='center',
-                    unsafe_allow_html=True)
+        st.markdown("<h2 style='color:#9bbdff;'>Login</h2>", text_alignment='center', unsafe_allow_html=True)
 
         nome_email = st.text_input('Nome de usuário ou E-mail', icon=':material/person:')
         senha = st.text_input('Senha', type='password', icon=':material/key:')
@@ -450,15 +442,14 @@ if not st.session_state.logado:
     st.markdown('</div>', unsafe_allow_html=True)
 
 
-# ABAS APÓS LOGIN
-
+# Interface após login
 else:
     nome_abas = [':material/home: Início', ':material/box: Estoque', ':material/3d: Máquinas', ':material/deployed_code: Produtos', ':material/attach_money: Vendas', ':material/bar_chart: Gráficos',':material/calendar_month: Calendário']
     if st.session_state.nivel == 'admin':
         nome_abas.append(':material/boy: Usuários')
     abas = st.tabs(nome_abas)
 
-# ABA 1 - INÍCIO
+# ABA 1 - Ínicio
     with abas[0]:
         with conectar() as conn:
             vendas_hj = pd.read_sql_query(
@@ -511,7 +502,7 @@ else:
         st.markdown(f"<h2 style='color=white;'>Bem-vindo, {st.session_state.unome}!</h2>", unsafe_allow_html=True)
         st.caption('Sistema de Gestão – Impressora 3D')
 
-        with st.popover(':material/menu_book: Tutorial'):
+        with st.popover(':material/menu_book: Tutorial'):  # Manual de uso
             st.caption('Acessar o tutorial')
             if st.session_state.nivel == 'admin':
                 st.markdown('[Manual](https://sustentabilize.my.canva.site/tutorial-admin)')
@@ -520,8 +511,8 @@ else:
             else:
                 st.markdown('[Manual](https://sustentabilize.my.canva.site/tutorial-usu-rio)')
 
-        c1, c2, c3, c4 = st.columns(4)## 
         
+        c1, c2, c3, c4 = st.columns(4)  # Box de avisos
         with c1:
             box('Vendas de hoje', vendas_hj,'💵')
         with c2:
@@ -538,9 +529,9 @@ else:
             with c4:
                 box('Faturamento mensal',f'R$ {fat_mensal:.2f}','📈')
 
-        col_p, col_e, coln, col_d = st.columns([1,1.5,0.1,1])
-
-        with col_p:
+        
+        col_p, col_e, coln, col_d = st.columns([1,1.5,0.1,1]) 
+        with col_p:  # Informações perfil logado
             st.markdown('**:material/account_circle: Perfil**')
             st.caption(f'**{st.session_state.unome}**')
             st.caption(f'Nível: {st.session_state.nivel}')
@@ -550,7 +541,7 @@ else:
                 st.session_state.tela_login = 'login'
                 st.rerun()
 
-        with col_e:
+        with col_e:  # Alertas
             st.markdown('**:material/release_alert: Alertas**')
             limite = 23
 
@@ -584,7 +575,7 @@ else:
             else:
                 st.success('✔ Estoque de filamentos em nível seguro')
 
-        with col_d:
+        with col_d:  # Busca filtrada
             st.markdown('**:material/filter_alt: Busca por Filtros**')
             menu = st.radio('⌕ O que deseja buscar', ['Produto(s) por ID','Produto(s) pro cor'], index=None)
 
@@ -610,13 +601,11 @@ else:
                     else:
                         st.dataframe(resultado, use_container_width=True)
 
-
-# ABA 2 - ESTOQUE
-
+# ABA 2 - Estoque
     with abas[1]:
         aba2_1, aba2_2 = st.tabs(['Estoque de filamentos', 'Adicionar material'])
 
-        with aba2_1:
+        with aba2_1: 
             card('Estoque de Filamentos','Visualização completa dos materiais atualmente cadastrados no sistema.')
             st.dataframe(bd_filamento(), use_container_width=True)
 
@@ -625,9 +614,7 @@ else:
                 st.error('☹ Você não têm permissão para acessar esta aba')
             else:
                 card('Adicionar Novo Filamento', 'Preencha corretamente os dados para registrar um novo material no estoque.')
-               
                 id_filamento = st.number_input('ID filamento *', min_value=1)
-
                 with conectar() as conn:
                     id_regs = pd.read_sql_query(
                         'SELECT * FROM filamentos WHERE id_filamento = %s',
@@ -688,8 +675,7 @@ else:
                         st.rerun()
 
 
-# ABA 3 - MÁQUINAS
-
+# ABA 3 - Máquinas
     with abas[2]:
         aba3_1, aba3_2 = st.tabs(['Máquinas', 'Cadastrar máquinas'])
 
@@ -710,7 +696,6 @@ else:
                 st.error('☹ Você não têm permissão para acessar esta aba')
             else:
                 card('Inserir nova máquina', 'Preencha as informações para cadastrar uma nova máquina.')
-
                 with st.form('Cadastrar máquina', clear_on_submit=True):
                     nome = st.text_input('Nome da máquina')
                     horas_uso = st.number_input('Horas de uso', min_value=0.0, format='%.2f')
@@ -727,8 +712,7 @@ else:
                         st.rerun()
 
 
-# ABA 4 - PRODUTOS
-
+# ABA 4 - Produtos
     with abas[3]:
         aba4_1, aba4_2, aba4_3 = st.tabs(['Produtos cadastrados', 'Cadastrar produto', 'Ver status dos produtos'])
 
@@ -785,7 +769,6 @@ else:
                     usuarios = pd.read_sql_query('SELECT id, nome FROM usuarios', conn)
 
                 st.markdown('### Dados do pedido')
-
                 id_usuario = st.selectbox('ID do usuário responsável',usuarios['id'])
                 user_info = usuarios[usuarios['id'] == id_usuario].iloc[0]
                 st.caption(f"Responsável: {user_info['nome']}")
@@ -909,7 +892,6 @@ else:
                                     )
 
                                 conn.commit()
-
                                 st.success(f'Máquina {maq_id} agora está Operando!')
 
                             st.success('Produto em impressão!')
@@ -918,7 +900,6 @@ else:
                     else:
                         st.caption('Fila de impressão vazia')
                        
-
                 with cols1[2]:
                     st.markdown('⎙ Imprimindo')
                     impd = produtos[produtos['status_produto'] == 'imprimindo']
@@ -947,7 +928,6 @@ else:
                     else:
                         st.caption('Nenhum produto impresso')
                            
-
                 with cols2[1]:
                     st.markdown('🖌 Pós-processamento')
                     posp = produtos[produtos['status_produto'] == 'pos_processamento']
@@ -964,7 +944,6 @@ else:
                             st.rerun()
                     else:
                         st.caption('Nenhum produto aguardando pós-processamento')
-
 
                 with cols2[2]:
                     st.markdown('✔ Pronto')
@@ -984,7 +963,6 @@ else:
                     else:
                         st.caption('Não há produtos prontos')
 
-
                 with cols3[1]:
                     st.markdown('⛟ Enviado')
                     enviado = produtos[produtos['status_produto'] == 'enviado']
@@ -994,33 +972,28 @@ else:
                     else:
                         st.caption('Nenhum produto enviado')
 
-
-# Aba vendas        
+# ABA 5 - Vendas        
         with abas[4]:
             if st.session_state.nivel in ['usuario', 'operador']:
                 st.error('☹ Você não têm permissão para acessar esta aba')
             else:
                 card('Histórico de Vendas','Registro completo de todas as vendas realizadas.')
-
                 vendas_df = bd_vendas()
                 st.dataframe(vendas_df, use_container_width=True)
 
 
-# Aba gráficos                
+# ABA 6 - Gráficos                
         with abas[5]:
             if st.session_state.nivel != 'admin':
                 st.error('☹ Você não têm permissão para acessar esta aba')
             else:
                 card('Gráficos de eficiência','Visualização simplificada de dados em gráficos.')
-
-                aba6_1, aba6_2, aba6_3, aba6_4 = st.tabs(
-                    ['Produção por status', 'Vendas', 'Pedidos', 'Máquinas']
-                )
+                aba6_1, aba6_2, aba6_3, aba6_4 = st.tabs(['Produção por status', 'Vendas', 'Pedidos', 'Máquinas'])
 
 # Produção por status
                 with aba6_1:
                     df_produtos = producao_por_status()
-
+                    
                     if df_produtos.empty:
                         st.warning('Não há produtos cadastrados!')
                     else:
@@ -1039,8 +1012,7 @@ else:
                         ax.tick_params(axis='both', colors='white')
                         st.pyplot(fig)
 
-
-# Vendas 
+# Vendas M/S
                 with aba6_2:
                     col_m, col_s = st.columns(2)
 
@@ -1090,7 +1062,7 @@ else:
                         st.pyplot(fig)
 
 
-# Pedidos
+# Pedidos M/S
                 with aba6_3:
                     col_m, col_s = st.columns(2)
 
@@ -1140,9 +1112,8 @@ else:
                         st.pyplot(fig)
 
 
-# Horas uso
+# Horas uso M/S
                 with aba6_4:
-
                     col_m, col_s = st.columns(2)
 
                     with conectar() as conn:
@@ -1190,15 +1161,13 @@ else:
                         ax.tick_params(colors='white')
                         st.pyplot(fig)
 
-
-# Aba Calendário
-
+# ABA 7 - Calendário
         with abas[6]:
             card('Calendário de prazos','Registro de produtos e data limite de envio.')
             calendario()
             
 
-# Aba usuários - exclusiva admin
+# ABA 8 - Usuários - exclusiva admin
         if st.session_state.nivel == 'admin':
             with abas[-1]:
                 with conectar() as conn:
