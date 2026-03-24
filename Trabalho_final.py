@@ -323,7 +323,7 @@ def calendario():
             'color': cor
         })
 
-    calendar(events=eventos, options=calendario_opt, key='calendar_main')
+    calendar(events=eventos, options=calendario_opt, key='Calendario')
 
 
 def validar_filamento(id_filamento, tipo, cor, marca, custo):
@@ -373,7 +373,7 @@ if not st.session_state.logado:
         senha = st.text_input('Senha', type='password', icon=':material/key:').strip()
         st.session_state.unome = nome
 
-        if st.button('Criar conta', icon=':material/account_circle:', use_container_width=True):
+        if st.button('Criar conta', icon=':material/account_circle:', width='stretch'):
             with conectar() as conn:
                 existe = pd.read_sql_query(
                     'SELECT id FROM usuarios WHERE nome=%s',
@@ -410,7 +410,7 @@ if not st.session_state.logado:
         nome_email = st.text_input('Nome de usuário ou E-mail', icon=':material/person:')
         senha = st.text_input('Senha', type='password', icon=':material/key:')
 
-        if st.button('Acessar', icon=':material/input:', use_container_width=True):
+        if st.button('Acessar', icon=':material/input:', width='stretch'):
             with conectar() as conn:
                 user = pd.read_sql_query(
                     '''SELECT nome, email, senha, nivel
@@ -557,15 +557,12 @@ else:
                     st.success('✔ Todas as máquinas estão com manutenção em dia!')
                 else:
                     st.error(f'⚠ {len(atrasadas)} máquina(s) sem manutenção há mais de {limite} dias!')
-                    st.dataframe(
-                        atrasadas[['id_maq','nome','dt_manutencao','dias_sem_manutencao']],
-                        use_container_width=True
-                    )
+                    st.dataframe(atrasadas[['id_maq','nome','dt_manutencao','dias_sem_manutencao']], width='stretch')
 
             df_alerta = alerta_estoque()
             if not df_alerta.empty:
                 st.error(f'⚠ {len(df_alerta)} filamento(s) com estoque crítico!')
-                st.dataframe(df_alerta[['id_filamento','tipo','cor','estoque']], use_container_width=True)
+                st.dataframe(df_alerta[['id_filamento','tipo','cor','estoque']], width='stretch')
             else:
                 st.success('✔ Estoque de filamentos em nível seguro')
 
@@ -582,7 +579,7 @@ else:
                     if len(resultado) == 0:
                         st.warning('Produto não encontrado')
                     else:
-                        st.dataframe(resultado, use_container_width=True)
+                        st.dataframe(resultado, width='stretch')
 
             if menu == 'Produto(s) pro cor':
                 cor_busca = st.text_input('Informe a cor do produto')
@@ -593,7 +590,7 @@ else:
                     if len(resultado) == 0:
                         st.warning('Nenhum produto encontrado com essa cor')
                     else:
-                        st.dataframe(resultado, use_container_width=True)
+                        st.dataframe(resultado, width='stretch')
 
 
 # ABA 2 - Estoque
@@ -602,7 +599,7 @@ else:
 
         with aba2_1: 
             card('Estoque de Filamentos','Visualização completa dos materiais atualmente cadastrados no sistema.')
-            st.dataframe(bd_filamento(), use_container_width=True)
+            st.dataframe(bd_filamento(), width='stretch')
 
         with aba2_2:
             if st.session_state.nivel == 'usuario':
@@ -665,7 +662,7 @@ else:
                                 else:
                                     st.stop()
 
-                        st.dataframe(bd_filamento(), use_container_width=True)
+                        st.dataframe(bd_filamento(), width='stretch')
                         st.rerun()
 
 
@@ -678,7 +675,7 @@ else:
             maquinas = bd_maquinas()
             maq_ocupada = maquinas[maquinas['status'] == 'Operando']
 
-            st.dataframe(maquinas, use_container_width=True)
+            st.dataframe(maquinas, width='stretch')
 
             if maq_ocupada.empty:
                 st.caption('Não há máquinas operando neste momento.')
@@ -701,7 +698,7 @@ else:
                     if adc:
                         nova_maq(nome, horas_uso, dt_manutencao)
                         st.success('Máquina adicionada!')
-                        st.dataframe(bd_maquinas(), use_container_width=True)
+                        st.dataframe(bd_maquinas(), width='stretch')
                         st.rerun()
 
 
@@ -711,7 +708,7 @@ else:
 
         with aba4_1:
             card('Produtos cadastrados', 'Lista completa de produtos disponíveis para venda.')
-            st.dataframe(bd_produtos(), use_container_width=True)
+            st.dataframe(bd_produtos(), width='stretch')
 
         with aba4_2:
             if st.session_state.nivel == 'usuario':
@@ -797,7 +794,7 @@ else:
                         novo_pedido(id_usuario, id_produto, cliente)
 
                         st.success('✅ Produto salvo no catálogo!')
-                        st.dataframe(bd_produtos(), use_container_width=True)
+                        st.dataframe(bd_produtos(), width='stretch')
                         st.rerun()
                         
         with aba4_3:
@@ -1151,8 +1148,7 @@ else:
 # ABA 7 - Calendário
         with abas[6]:
             card('Calendário de prazos','Registro de produtos e data limite de envio.')
-            with st.spinner("Carregando calendário..."):
-                calendario()
+            calendario()
             
 
 # ABA 8 - Usuários - exclusiva admin
@@ -1164,7 +1160,7 @@ else:
                         conn
                     )
 
-                st.dataframe(usuarios, use_container_width=True)
+                st.dataframe(usuarios, width='stretch')
                
                 uid = st.selectbox('ID Usuário', usuarios['id'])
                 user_info = usuarios[usuarios['id'] == uid].iloc[0]
