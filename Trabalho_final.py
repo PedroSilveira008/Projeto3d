@@ -441,7 +441,7 @@ else:
     nome_abas = [':material/home: Início', ':material/box: Estoque', ':material/3d: Máquinas', ':material/deployed_code: Produtos', ':material/attach_money: Vendas', ':material/bar_chart: Gráficos', ':material/calendar_month: Calendário']
     if st.session_state.nivel == 'admin':
         nome_abas.append(':material/boy: Usuários')
-    abas = st.radio('', nome_abas, index=None, horizontal=True)
+    abas = st.radio('', [':material/home: Início', ':material/box: Estoque', ':material/3d: Máquinas', ':material/deployed_code: Produtos', ':material/attach_money: Vendas', ':material/bar_chart: Gráficos', ':material/calendar_month: Calendário'], index=None, horizontal=True)
 
 # ABA 1 - Ínicio
     with abas == ':material/home: Início':
