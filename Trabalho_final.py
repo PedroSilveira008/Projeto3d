@@ -441,10 +441,10 @@ else:
     nome_abas = [':material/home: Início', ':material/box: Estoque', ':material/3d: Máquinas', ':material/deployed_code: Produtos', ':material/attach_money: Vendas', ':material/bar_chart: Gráficos', ':material/calendar_month: Calendário']
     if st.session_state.nivel == 'admin':
         nome_abas.append(':material/boy: Usuários')
-    abas = st.radio('', [':material/home: Início', ':material/box: Estoque', ':material/3d: Máquinas', ':material/deployed_code: Produtos', ':material/attach_money: Vendas', ':material/bar_chart: Gráficos', ':material/calendar_month: Calendário'], index=None, horizontal=True)
+    abas = st.radio('', nome_abas, index=None, horizontal=True)
 
 # ABA 1 - Ínicio
-    with abas == ':material/home: Início':
+    if abas == ':material/home: Início':
         with conectar() as conn:
             vendas_hj = pd.read_sql_query(
                 '''
@@ -596,7 +596,7 @@ else:
                         st.dataframe(resultado, use_container_width=True)
 
 # ABA 2 - Estoque
-    with abas == ':material/box: Estoque':
+    elif abas == ':material/box: Estoque':
         aba2_1, aba2_2 = st.tabs(['Estoque de filamentos', 'Adicionar material'])
 
         with aba2_1: 
@@ -669,7 +669,7 @@ else:
 
 
 # ABA 3 - Máquinas
-    with abas == ':material/3d: Máquinas':
+    elif abas == ':material/3d: Máquinas':
         aba3_1, aba3_2 = st.tabs(['Máquinas', 'Cadastrar máquinas'])
 
         with aba3_1:
@@ -705,7 +705,7 @@ else:
 
 
 # ABA 4 - Produtos
-    with abas == ':material/deployed_code: Produtos':
+    elif abas == ':material/deployed_code: Produtos':
         aba4_1, aba4_2, aba4_3 = st.tabs(['Produtos cadastrados', 'Cadastrar produto', 'Ver status dos produtos'])
 
         with aba4_1:
@@ -799,7 +799,7 @@ else:
                         st.dataframe(bd_produtos(), use_container_width=True)
                         st.rerun()
                         
-        with aba4_3:
+        elif aba4_3:
             if st.session_state.nivel == 'usuario':
                 st.error('☹ Você não têm permissão para acessar esta aba')
             else:
@@ -959,7 +959,7 @@ else:
                         st.caption('Nenhum produto enviado')
 
 # ABA 5 - Vendas        
-        with abas == ':material/attach_money: Vendas':
+        elif abas == ':material/attach_money: Vendas':
             if st.session_state.nivel in ['usuario', 'operador']:
                 st.error('☹ Você não têm permissão para acessar esta aba')
             else:
@@ -969,7 +969,7 @@ else:
 
 
 # ABA 6 - Gráficos                
-        with abas == ':material/bar_chart: Gráficos':
+        elif abas == ':material/bar_chart: Gráficos':
             if st.session_state.nivel != 'admin':
                 st.error('☹ Você não têm permissão para acessar esta aba')
             else:
@@ -1156,7 +1156,7 @@ else:
 
 # ABA 8 - Usuários - exclusiva admin
         if st.session_state.nivel == 'admin':
-            with abas == ':material/calendar_month: Calendário':
+            elif abas == ':material/calendar_month: Calendário':
                 with conectar() as conn:
                     usuarios = pd.read_sql_query(
                         'SELECT id,nome,email,nivel FROM usuarios',
