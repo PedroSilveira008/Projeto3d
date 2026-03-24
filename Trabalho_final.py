@@ -296,15 +296,15 @@ def crg_eventos():
         )
             
 def calendario():
-    # calendario_opt = {
-    #     'initialView': 'dayGridMonth',
-    #     'locale': 'pt-br',
-    #     'buttonText': {
-    #         'today': 'Hoje',
-    #     }
-    # }
+    calendario_opt = {
+        'initialView': 'dayGridMonth',
+        'locale': 'pt-br',
+        'buttonText': {
+            'today': 'Hoje',
+        }
+    }
 
-    # df = crg_eventos()
+    df = crg_eventos()
     if df.empty:
         st.info('Nenhum evento encontrado')
         calendar(events=[], options=calendario_opt, key='calendar_main')
