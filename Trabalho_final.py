@@ -959,22 +959,22 @@ else:
                         st.caption('Nenhum produto enviado')
 
 # ABA 5 - Vendas        
-        elif abas == ':material/attach_money: Vendas':
-            if st.session_state.nivel in ['usuario', 'operador']:
-                st.error('☹ Você não têm permissão para acessar esta aba')
-            else:
-                card('Histórico de Vendas','Registro completo de todas as vendas realizadas.')
-                vendas_df = bd_vendas()
-                st.dataframe(vendas_df, use_container_width=True)
+    elif abas == ':material/attach_money: Vendas':
+        if st.session_state.nivel in ['usuario', 'operador']:
+            st.error('☹ Você não têm permissão para acessar esta aba')
+        else:
+            card('Histórico de Vendas','Registro completo de todas as vendas realizadas.')
+            vendas_df = bd_vendas()
+            st.dataframe(vendas_df, use_container_width=True)
 
 
 # ABA 6 - Gráficos                
-        elif abas == ':material/bar_chart: Gráficos':
-            if st.session_state.nivel != 'admin':
-                st.error('☹ Você não têm permissão para acessar esta aba')
-            else:
-                card('Gráficos de eficiência','Visualização simplificada de dados em gráficos.')
-                aba6_1, aba6_2, aba6_3, aba6_4 = st.tabs(['Produção por status', 'Vendas', 'Pedidos', 'Máquinas'])
+    elif abas == ':material/bar_chart: Gráficos':
+        if st.session_state.nivel != 'admin':
+            st.error('☹ Você não têm permissão para acessar esta aba')
+        else:
+            card('Gráficos de eficiência','Visualização simplificada de dados em gráficos.')
+            aba6_1, aba6_2, aba6_3, aba6_4 = st.tabs(['Produção por status', 'Vendas', 'Pedidos', 'Máquinas'])
 
 # Produção por status
                 with aba6_1:
@@ -1156,7 +1156,7 @@ else:
 
 # ABA 8 - Usuários - exclusiva admin
         if st.session_state.nivel == 'admin':
-            elif abas == ':material/calendar_month: Calendário':
+            if abas == ':material/calendar_month: Calendário':
                 with conectar() as conn:
                     usuarios = pd.read_sql_query(
                         'SELECT id,nome,email,nivel FROM usuarios',
