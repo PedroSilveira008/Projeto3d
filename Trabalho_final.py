@@ -799,7 +799,7 @@ else:
                         st.dataframe(bd_produtos(), use_container_width=True)
                         st.rerun()
                         
-        elif aba4_3:
+        with aba4_3:
             if st.session_state.nivel == 'usuario':
                 st.error('☹ Você não têm permissão para acessar esta aba')
             else:
