@@ -438,13 +438,13 @@ if not st.session_state.logado:
 
 # Interface após login
 else:
-    nome_abas = [':material/home: Início', ':material/box: Estoque', ':material/3d: Máquinas', ':material/deployed_code: Produtos', ':material/attach_money: Vendas', ':material/bar_chart: Gráficos',':material/calendar_month: Calendário']
+    nome_abas = [':material/home: Início', ':material/box: Estoque', ':material/3d: Máquinas', ':material/deployed_code: Produtos', ':material/attach_money: Vendas', ':material/bar_chart: Gráficos', ':material/calendar_month: Calendário']
     if st.session_state.nivel == 'admin':
         nome_abas.append(':material/boy: Usuários')
-    abas = st.tabs(nome_abas)
+    abas = st.radio('', nome_abas, index=None, horizontal=True)
 
 # ABA 1 - Ínicio
-    with abas[0]:
+    with abas == ':material/home: Início':
         with conectar() as conn:
             vendas_hj = pd.read_sql_query(
                 '''
@@ -571,7 +571,7 @@ else:
 
         with col_d:  # Busca filtrada
             st.markdown('**:material/filter_alt: Busca por Filtros**')
-            menu = st.radio('⌕ O que deseja buscar', ['Produto(s) por ID','Produto(s) pro cor','Calendário'], index=None)
+            menu = st.radio('⌕ O que deseja buscar', ['Produto(s) por ID','Produto(s) pro cor'], index=None)
 
             if menu == 'Produto(s) por ID':
                 id_busca = st.number_input('Informe o ID do produto', min_value=1)
@@ -594,12 +594,9 @@ else:
                         st.warning('Nenhum produto encontrado com essa cor')
                     else:
                         st.dataframe(resultado, use_container_width=True)
-            if menu == 'Calendário':
-                with st.spinner("Carregando calendário..."):
-                    calendario()
 
 # ABA 2 - Estoque
-    with abas[1]:
+    with abas == ':material/box: Estoque':
         aba2_1, aba2_2 = st.tabs(['Estoque de filamentos', 'Adicionar material'])
 
         with aba2_1: 
@@ -672,7 +669,7 @@ else:
 
 
 # ABA 3 - Máquinas
-    with abas[2]:
+    with abas == ':material/3d: Máquinas':
         aba3_1, aba3_2 = st.tabs(['Máquinas', 'Cadastrar máquinas'])
 
         with aba3_1:
@@ -708,7 +705,7 @@ else:
 
 
 # ABA 4 - Produtos
-    with abas[3]:
+    with abas == ':material/deployed_code: Produtos':
         aba4_1, aba4_2, aba4_3 = st.tabs(['Produtos cadastrados', 'Cadastrar produto', 'Ver status dos produtos'])
 
         with aba4_1:
@@ -962,7 +959,7 @@ else:
                         st.caption('Nenhum produto enviado')
 
 # ABA 5 - Vendas        
-        with abas[4]:
+        with abas == ':material/attach_money: Vendas':
             if st.session_state.nivel in ['usuario', 'operador']:
                 st.error('☹ Você não têm permissão para acessar esta aba')
             else:
@@ -972,7 +969,7 @@ else:
 
 
 # ABA 6 - Gráficos                
-        with abas[5]:
+        with abas == ':material/bar_chart: Gráficos':
             if st.session_state.nivel != 'admin':
                 st.error('☹ Você não têm permissão para acessar esta aba')
             else:
@@ -1159,7 +1156,7 @@ else:
 
 # ABA 8 - Usuários - exclusiva admin
         if st.session_state.nivel == 'admin':
-            with abas[-1]:
+            with abas == ':material/calendar_month: Calendário':
                 with conectar() as conn:
                     usuarios = pd.read_sql_query(
                         'SELECT id,nome,email,nivel FROM usuarios',
