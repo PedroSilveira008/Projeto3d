@@ -571,7 +571,7 @@ else:
 
         with col_d:  # Busca filtrada
             st.markdown('**:material/filter_alt: Busca por Filtros**')
-            menu = st.radio('⌕ O que deseja buscar', ['Produto(s) por ID','Produto(s) pro cor'], index=None)
+            menu = st.radio('⌕ O que deseja buscar', ['Produto(s) por ID','Produto(s) pro cor','Calendário'], index=None)
 
             if menu == 'Produto(s) por ID':
                 id_busca = st.number_input('Informe o ID do produto', min_value=1)
@@ -594,6 +594,9 @@ else:
                         st.warning('Nenhum produto encontrado com essa cor')
                     else:
                         st.dataframe(resultado, use_container_width=True)
+            if menu == 'Calendário':
+                with st.spinner("Carregando calendário..."):
+                    calendario()
 
 # ABA 2 - Estoque
     with abas[1]:
