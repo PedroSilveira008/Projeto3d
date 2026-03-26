@@ -1148,13 +1148,19 @@ else:
 # ABA 7 - Calendário
         with abas[6]:
             st.header('Calendário de prazos e histórico de pedidos')
+            bt1, bt2 = st.columns(2)
             if 'crg_calendario' not in st.session_state:
                 st.session_state.crg_calendario = False
-                
-            if st.button('Carregar calendário', icon=':material/autoplay:'):
-                st.session_state.crg_calendario = True
-            if st.session_state.crg_calendario:
-                calendario()
+            with bt1:
+                if st.button('Carregar calendário', icon=':material/autoplay:', key='b_mostra'):
+                    st.session_state.crg_calendario = True
+                if st.session_state.crg_calendario:
+                    calendario()
+            with bt2:
+                if st.button('Ocultar calendário', icon=':material/visibility_off:', key='b_mostra'):
+                    st.session_state.crg_calendario = False
+                if st.session_state.crg_calendario == False:
+                    st.caption('Calendário ocultado')
             
             
 
