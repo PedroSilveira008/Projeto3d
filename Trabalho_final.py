@@ -1148,7 +1148,7 @@ else:
 # ABA 7 - Calendário
         with abas[6]:
             st.header('Calendário de prazos e histórico de pedidos')
-            bt1, bt2 = st.columns(2)
+            bt1, bt2, coln = st.columns(3)
             if 'crg_calendario' not in st.session_state:
                 st.session_state.crg_calendario = False
             with bt1:
@@ -1162,7 +1162,7 @@ else:
             if st.session_state.crg_calendario:
                 calendario()
             else:
-                st.caption('Calendário ocultado')
+                st.caption('Calendário ocultado.')
             
             
 
