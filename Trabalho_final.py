@@ -1112,7 +1112,7 @@ else:
                         st.caption('Todas as máquinas')
                         
                     with conectar() as conn:
-                        if maq_selecionada == 'Todas':  # Verifica opção escolhida
+                        if select_maq == 'Todas':  # Verifica opção escolhida
                             hrs_mes = '''
                             SELECT TO_CHAR(v.data, 'MM') as mes,
                             SUM(p.tempo_imprimir)/60 as horas
@@ -1136,10 +1136,10 @@ else:
                             maq_mes = pd.read_sql_query(hrs_mes, conn, params=(maq_selecionada,))
 
 
-                        if maq_selecionada == 'Todas':
+                        if select_maq == 'Todas':
                             query_semana = '''
                             SELECT TO_CHAR(v.data, 'WW') as semana,
-                                   SUM(p.tempo_imprimir)/60 as horas
+                            SUM(p.tempo_imprimir)/60 as horas
                             FROM produtos p
                             JOIN vendas v ON p.id_produto = v.id_produto
                             GROUP BY semana
@@ -1150,7 +1150,7 @@ else:
                         else:
                             query_semana = '''
                             SELECT TO_CHAR(v.data, 'WW') as semana,
-                                   SUM(p.tempo_imprimir)/60 as horas
+                            SUM(p.tempo_imprimir)/60 as horas
                             FROM produtos p
                             JOIN vendas v ON p.id_produto = v.id_produto
                             WHERE p.id_maq = %s
@@ -1216,7 +1216,6 @@ else:
                 uid = st.selectbox('ID Usuário', usuarios['id'])
                 user_info = usuarios[usuarios['id'] == uid].iloc[0]
                 st.caption(f"Usuário: {user_info['nome']}")
-                
                 nivel = st.selectbox('Novo nível', ['usuario', 'operador', 'admin'])
 
                 if st.button('Atualizar nível', icon=':material/autorenew:'):
