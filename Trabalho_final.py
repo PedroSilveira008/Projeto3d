@@ -1133,7 +1133,7 @@ else:
                             GROUP BY mes
                             ORDER BY mes
                             '''
-                            maq_mes = pd.read_sql_query(hrs_mes, conn, params=(maq_selecionada,))
+                            maq_mes = pd.read_sql_query(hrs_mes, conn, params=(select_maq,))
 
 
                         if select_maq == 'Todas':
@@ -1157,7 +1157,7 @@ else:
                             GROUP BY semana
                             ORDER BY semana
                             '''
-                            maq_semana = pd.read_sql_query(query_semana, conn, params=(maq_selecionada,))
+                            maq_semana = pd.read_sql_query(query_semana, conn, params=(select_maq,))
 
                     with col_m:
                         st.markdown('### Horas de uso por mês')
