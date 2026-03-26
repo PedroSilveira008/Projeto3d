@@ -1147,6 +1147,7 @@ else:
 
 # ABA 7 - Calendário
         with abas[6]:
+            st.header('Calendário de prazos e histórico de pedidos')
             if st.button('Carregar calendário', icon=':material/autoplay:'):
                 calendario()
             
