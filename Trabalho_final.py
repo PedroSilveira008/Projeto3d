@@ -1029,7 +1029,7 @@ else:
                         ax.set_facecolor('none')
 
                         ax.plot(vendas_mes['mes'], vendas_mes['total'], marker='o', color='#7d77e1')
-                        ax.set_title('Faturamento por mês', color='white')
+                        ax.set_title('Quantidade de vendas por mês', color='white')
                         ax.tick_params(colors='white')
                         st.pyplot(fig)
 
@@ -1041,7 +1041,7 @@ else:
                         ax.set_facecolor('none')
 
                         ax.plot(vendas_semana['semana'], vendas_semana['total'], marker='o', color='#7d77e1')
-                        ax.set_title('Faturamento por semana', color='white')
+                        ax.set_title('Quantidade de vendas por semana', color='white')
                         ax.tick_params(colors='white')
                         st.pyplot(fig)
 
@@ -1099,29 +1099,65 @@ else:
 # Horas uso M/S
                 with aba6_4:
                     col_m, col_s = st.columns(2)
-
+                    maquinas = bd_maquinas()
+                    opc = ['Todas'] + list(maquinas['id_maq'])
+                    select_maq = st.selectbox('Selecione a máquina', opc)
+                    
+                    if select_maq != 'Todas':
+                        maq_filtrado = maquinas[maquinas['id_maq'] == select_maq]
+                        maq_info = maq_filtrado.iloc[0]
+                    
+                        st.caption(f'Máquina: {maq_info['nome']}')
+                    else:
+                        st.caption('Todas as máquinas')
+                        
                     with conectar() as conn:
-                        maq_mes = pd.read_sql_query(
-                            '''
+                        if maq_selecionada == 'Todas':  # Verifica opção escolhida
+                            hrs_mes = '''
                             SELECT TO_CHAR(v.data, 'MM') as mes,
-                                   SUM(p.tempo_imprimir)/60 as horas
+                            SUM(p.tempo_imprimir)/60 as horas
                             FROM produtos p
                             JOIN vendas v ON p.id_produto = v.id_produto
                             GROUP BY mes
                             ORDER BY mes
-                            ''', conn
-                        )
-
-                        maq_semana = pd.read_sql_query(
                             '''
+                            maq_mes = pd.read_sql_query(hrs_mes, conn)
+                        
+                        else:
+                            hrs_mes = '''
+                            SELECT TO_CHAR(v.data, 'MM') as mes,
+                            SUM(p.tempo_imprimir)/60 as horas
+                            FROM produtos p
+                            JOIN vendas v ON p.id_produto = v.id_produto
+                            WHERE p.id_maq = %s
+                            GROUP BY mes
+                            ORDER BY mes
+                            '''
+                            maq_mes = pd.read_sql_query(hrs_mes, conn, params=(maq_selecionada,))
+
+
+                        if maq_selecionada == 'Todas':
+                            query_semana = '''
                             SELECT TO_CHAR(v.data, 'WW') as semana,
                                    SUM(p.tempo_imprimir)/60 as horas
                             FROM produtos p
                             JOIN vendas v ON p.id_produto = v.id_produto
                             GROUP BY semana
                             ORDER BY semana
-                            ''', conn
-                        )
+                            '''
+                            maq_semana = pd.read_sql_query(query_semana, conn)
+                        
+                        else:
+                            query_semana = '''
+                            SELECT TO_CHAR(v.data, 'WW') as semana,
+                                   SUM(p.tempo_imprimir)/60 as horas
+                            FROM produtos p
+                            JOIN vendas v ON p.id_produto = v.id_produto
+                            WHERE p.id_maq = %s
+                            GROUP BY semana
+                            ORDER BY semana
+                            '''
+                            maq_semana = pd.read_sql_query(query_semana, conn, params=(maq_selecionada,))
 
                     with col_m:
                         st.markdown('### Horas de uso por mês')
