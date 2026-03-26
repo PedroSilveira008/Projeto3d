@@ -126,17 +126,14 @@ def hash_senha(senha):
 def verifica_senha(senha, hash_salvo):
     return bcrypt.checkpw(senha.encode(), hash_salvo.encode())
     
-@st.cache_data(ttl=30)
 def bd_filamento():
     with conectar() as conn:
         return pd.read_sql_query('SELECT * FROM filamentos', conn)
 
-@st.cache_data(ttl=30)
 def bd_maquinas():
     with conectar() as conn:
         return pd.read_sql_query('SELECT * FROM maquinas', conn)
 
-@st.cache_data(ttl=30)
 def bd_pedidos():
     query = '''
     SELECT * FROM pedidos pd
@@ -145,12 +142,10 @@ def bd_pedidos():
     with conectar() as conn:
         return pd.read_sql_query(query, conn)
         
-@st.cache_data(ttl=30)    
 def bd_produtos():
     with conectar() as conn:
         return pd.read_sql_query('SELECT * FROM produtos', conn)
 
-@st.cache_data(ttl=30)
 def bd_vendas():
     query = '''
     SELECT v.id_vendas, p.nome_prod, v.quantidade, v.data, v.prazo,
@@ -281,7 +276,6 @@ def producao_por_status():
         return pd.read_sql_query(query, conn)
 
 
-@st.cache_data(ttl=30)
 def crg_eventos():
     with conectar() as conn:
         return pd.read_sql_query(
