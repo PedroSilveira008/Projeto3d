@@ -304,7 +304,7 @@ def calendario():
     df = crg_eventos()
     if df.empty:
         st.info('Nenhum evento encontrado')
-        calendar(events=[], options=calendario_opt, key='calendar_main')
+        calendar(events=[], options=calendario_opt, key='Calendario')
         return
 
     df['dt_vencimento'] = pd.to_datetime(df['dt_vencimento']).dt.strftime('%Y-%m-%d')
@@ -1148,8 +1148,14 @@ else:
 # ABA 7 - Calendário
         with abas[6]:
             st.header('Calendário de prazos e histórico de pedidos')
-            if st.button('Carregar calendário', icon=':material/autoplay:'):
+            if 'crg_calendario' not in st.session_state:
+                st.session_state.crg_calendario = False
+                
+            if st.button('Carregar calendário'):
+                st.session_state.crg_calendario = True
+            if st.session_state.crg_calendario:
                 calendario()
+            
             
 
 # ABA 8 - Usuários - exclusiva admin
