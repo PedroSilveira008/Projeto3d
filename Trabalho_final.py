@@ -1154,13 +1154,15 @@ else:
             with bt1:
                 if st.button('Carregar calendário', icon=':material/autoplay:', key='b_mostra'):
                     st.session_state.crg_calendario = True
-                if st.session_state.crg_calendario:
-                    calendario()
+                    
             with bt2:
-                if st.button('Ocultar calendário', icon=':material/visibility_off:', key='b_mostra'):
+                if st.button('Ocultar calendário', icon=':material/visibility_off:', key='b_oculta'):
                     st.session_state.crg_calendario = False
-                if st.session_state.crg_calendario == False:
-                    st.caption('Calendário ocultado')
+                    
+            if st.session_state.crg_calendario:
+                calendario()
+            else:
+                st.caption('Calendário ocultado')
             
             
 
