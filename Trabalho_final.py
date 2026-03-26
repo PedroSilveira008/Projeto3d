@@ -1148,7 +1148,8 @@ else:
 # ABA 7 - Calendário
         with abas[6]:
             card('Calendário de prazos','Registro de produtos e data limite de envio.')
-            calendario()
+            if st.button('Carregar calendário', icon=':material/autoplay:'):
+                calendario()
             
 
 # ABA 8 - Usuários - exclusiva admin
