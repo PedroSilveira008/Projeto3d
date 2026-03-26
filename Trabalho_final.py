@@ -1151,7 +1151,7 @@ else:
             if 'crg_calendario' not in st.session_state:
                 st.session_state.crg_calendario = False
                 
-            if st.button('Carregar calendário'):
+            if st.button('Carregar calendário', icon=':material/autoplay:'):
                 st.session_state.crg_calendario = True
             if st.session_state.crg_calendario:
                 calendario()
