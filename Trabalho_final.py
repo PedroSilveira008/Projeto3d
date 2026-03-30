@@ -118,6 +118,12 @@ if 'tela_login' not in st.session_state:
     st.session_state.tela_login = 'criar'
 if 'nivel' not in st.session_state:
     st.session_state.nivel = None
+if 'prazo_padrao' not in st.session_state:
+    st.session_state.prazo_padrao = 7
+if 'custo_min' not in st.session_state:
+    st.session_state.custo_min = 0.05
+if 'custo_max' not in st.session_state:
+    st.session_state.custo_max = 0.30
 
 # Funções
 def hash_senha(senha):
@@ -215,8 +221,10 @@ def novo_produto(id_filamento, id_maq, nome_prod, tempo_imprimir, gasto_filament
         conn.commit()
         return id_produto
 
-def nova_venda(id_produto, prazo=7):
+def nova_venda(id_produto, prazo=None):
     hoje = date.today()
+    if prazo == None:
+        prazo = st.session_state.prazo_padrao
     dt_vencimento = hoje + timedelta(days=prazo)
     with conectar() as conn:
         with conn.cursor() as cur:
@@ -435,6 +443,7 @@ else:
     nome_abas = [':material/home: Início', ':material/box: Estoque', ':material/3d: Máquinas', ':material/deployed_code: Produtos', ':material/attach_money: Vendas', ':material/bar_chart: Gráficos',':material/calendar_month: Calendário']
     if st.session_state.nivel == 'admin':
         nome_abas.append(':material/boy: Usuários')
+        nome_abas.append(':material/settings: Configurações')
     abas = st.tabs(nome_abas)
 
 # ABA 1 - Ínicio
@@ -1198,7 +1207,7 @@ else:
 
 # ABA 8 - Usuários - exclusiva admin
         if st.session_state.nivel == 'admin':
-            with abas[-1]:
+            with abas[-2]:
                 with conectar() as conn:
                     usuarios = pd.read_sql_query(
                         'SELECT id,nome,email,nivel FROM usuarios',
@@ -1223,3 +1232,16 @@ else:
 
                     st.success('Nível atualizado com sucesso!')
                     st.rerun()
+
+            with abas[-1]:
+                card('Configurações do Sistema', 'Defina as personalizações dos parâmetros')
+                prazo = st.number_input('Prazo padrão (dias)', value=st.session_state.prazo_padrao)
+                cmin = st.number_input('Custo mínimo por grama', value=st.session_state.custo_min)
+                cmax = st.number_input('Custo máximo por grama', value=st.session_state.custo_max)
+        
+                if st.button('Salvar', icon=':material/save:'):
+                    st.session_state.prazo_padrao = prazo
+                    st.session_state.custo_min = cmin
+                    st.session_state.custo_max = cmax
+        
+                    st.success('Configurações salvas!')
