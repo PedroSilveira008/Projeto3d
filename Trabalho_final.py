@@ -743,7 +743,7 @@ else:
                 gasto_filamento = st.number_input('Filamento gasto (g)', min_value=0.0, format='%.2f')
                 personalizacao = st.text_input('Personalização no produto')
 
-                custo_grama = st.slider('Custo do filamento por grama (R$)', min_value=0.05, max_value=0.30, value=0.10, step=0.01)
+                custo_grama = st.slider('Custo do filamento por grama (R$)', min_value=st.session_state.custo_min, max_value=st.session_state.custo_min, value=(st.session_state.custo_min + st.session_state.custo_max) / 2, step=0.01)
                 custo_hora = st.number_input('Custo da hora de impressão (R$)', min_value=0.0, format='%.2f', value=15.0)
                 lucro = st.number_input('Porcentagem de lucro (%)', min_value=0.0, format='%.2f', value=20.0)
 
@@ -1245,3 +1245,4 @@ else:
                     st.session_state.custo_max = cmax
         
                     st.success('Configurações salvas!')
+                    st.rerun()
