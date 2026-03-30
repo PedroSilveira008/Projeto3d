@@ -443,7 +443,7 @@ else:
     nome_abas = [':material/home: Início', ':material/box: Estoque', ':material/3d: Máquinas', ':material/deployed_code: Produtos', ':material/attach_money: Vendas', ':material/bar_chart: Gráficos',':material/calendar_month: Calendário']
     if st.session_state.nivel == 'admin':
         nome_abas.append(':material/boy: Usuários')
-        nome_abas.append(':material/settings: Configurações')
+        nome_abas.append(':material/settings:')
     abas = st.tabs(nome_abas)
 
 # ABA 1 - Ínicio
